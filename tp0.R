@@ -1,4 +1,9 @@
+install.packages(c("FactoMineR", "factoextra"))
+library("FactoMineR")
+library("ggplot2")
+library("factoextra")
 library(tidyverse)
+library(RColorBrewer)
 data = load("Documents/app statistique/apprentissage statistique/TP1/regression-dataset.Rdata")
 fit = lm(y~x)
 summary(fit)
@@ -68,3 +73,28 @@ mv = function(X, mu, S){
 
 
 
+##Exercice 2
+getwd()
+y=as.character(read.table("TP1/nci.label")$V1)
+X =read.table("TP1/nci.data")
+X =t(X)
+#upprimez l’échantillon de classe inconnue et les échantillons relatifs à des expériences de reproductibilité (leur nom contient le terme "repro")
+ind1 = grep("repro", y)
+ind2 = which(y == "UNKNOWN")
+ind.rm = c(ind1, ind2)
+y = y[-ind.rm]
+y = factor(y)
+X = X[-ind.rm,]
+
+#Combien de composantes principales obtenez-vous ?
+scale = scale(X, center = TRUE, scale = TRUE)
+res.pca <- PCA(scale, graph = TRUE)
+
+
+##Exercice 3
+data = load("TP1/digits-3.Rdata")
+print(data)
+image(x = data)
+cols = gray(seq(1,0,length.out=256))
+X = apply(I, 3, function(x){as.vector(x)})
+X = t(X)
